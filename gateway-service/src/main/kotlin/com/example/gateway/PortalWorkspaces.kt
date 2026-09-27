@@ -53,7 +53,8 @@ class WorkspaceService(
     private val merchants: MerchantRepository,
     private val credentials: DeveloperCredentialRepository,
     private val webhooks: DeveloperWebhookRepository,
-    private val logs: DeveloperApiLogRepository
+    private val logs: DeveloperApiLogRepository,
+    private val payments: PaymentRepository
 ) {
     fun list(authorization: String?) = memberships.findBySubjectAndStatus(identity.subject(authorization), WorkspaceMembershipStatus.ACTIVE).mapNotNull { member -> organizations.findById(member.organizationId).orElse(null)?.let { mapOf("id" to it.id, "name" to it.name, "role" to member.role, "status" to it.status) } }
     fun create(authorization: String?, request: WorkspaceRequest): DeveloperOrganization {
@@ -82,6 +83,26 @@ class WorkspaceService(
     fun credentials(authorization: String?, workspaceId: String, appId: String) = scopedApp(workspaceId, appId, authorization, WorkspaceRole.entries.toSet()).let { credentials.findByAppId(it.id!!) }
     fun webhooks(authorization: String?, workspaceId: String, appId: String) = scopedApp(workspaceId, appId, authorization, WorkspaceRole.entries.toSet()).let { webhooks.findByAppId(it.id!!) }
     fun logs(authorization: String?, workspaceId: String, appId: String) = scopedApp(workspaceId, appId, authorization, WorkspaceRole.entries.toSet()).let { logs.findByAppIdOrderByCreatedAtDesc(it.id!!) }
+    fun transactions(authorization: String?, workspaceId: String): List<Map<String, Any?>> {
+        requireRole(workspaceId, identity.subject(authorization), WorkspaceRole.entries.toSet())
+        val merchantIds = merchants.findAll().filter { it.workspaceId == workspaceId }.map { it.merchantId }.toSet()
+        return merchantIds.flatMap { merchantId -> payments.findByMerchantId(merchantId) }
+            .sortedByDescending { it.createdAt }
+            .map { transaction ->
+                mapOf(
+                    "id" to transaction.id,
+                    "merchantId" to transaction.merchantId,
+                    "terminalId" to transaction.terminalId,
+                    "operation" to transaction.operation,
+                    "channel" to transaction.channel,
+                    "amountMinor" to transaction.amountMinor,
+                    "currency" to transaction.currency,
+                    "status" to transaction.status,
+                    "responseCode" to transaction.responseCode,
+                    "createdAt" to transaction.createdAt
+                )
+            }
+    }
     private fun scopedApp(workspaceId: String, appId: String, authorization: String?, allowed: Set<WorkspaceRole>): DeveloperApp { requireRole(workspaceId, identity.subject(authorization), allowed); val app = apps.findById(appId).orElseThrow { IllegalArgumentException("Application not found") }; require(app.organizationId == workspaceId) { "Application does not belong to workspace" }; return app }
     private fun requireRole(id: String, subject: String, allowed: Set<WorkspaceRole>) { val membership = memberships.findByOrganizationIdAndSubject(id, subject); require(membership != null && membership.status == WorkspaceMembershipStatus.ACTIVE && membership.role in allowed) { "Workspace access denied" } }
 }
@@ -101,4 +122,5 @@ class PortalWorkspaceController(private val workspaces: WorkspaceService) {
     @GetMapping("/{workspaceId}/apps/{appId}/credentials") fun credentials(@RequestHeader("Authorization", required = false) authorization: String?, @PathVariable workspaceId: String, @PathVariable appId: String) = workspaces.credentials(authorization, workspaceId, appId)
     @GetMapping("/{workspaceId}/apps/{appId}/webhooks") fun webhooks(@RequestHeader("Authorization", required = false) authorization: String?, @PathVariable workspaceId: String, @PathVariable appId: String) = workspaces.webhooks(authorization, workspaceId, appId)
     @GetMapping("/{workspaceId}/apps/{appId}/logs") fun logs(@RequestHeader("Authorization", required = false) authorization: String?, @PathVariable workspaceId: String, @PathVariable appId: String) = workspaces.logs(authorization, workspaceId, appId)
+    @GetMapping("/{id}/transactions") fun transactions(@RequestHeader("Authorization", required = false) authorization: String?, @PathVariable id: String) = workspaces.transactions(authorization, id)
 }

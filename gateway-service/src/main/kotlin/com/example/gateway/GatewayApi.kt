@@ -105,19 +105,26 @@ class PaymentService(private val switch: LocalIso8583Switch) {
 
 @RestController
 @RequestMapping("/api/v1")
-class GatewayController(private val payments: PersistentPaymentService) {
-    @PostMapping("/mobile/transactions/{operation}") @ResponseStatus(HttpStatus.CREATED)
-    fun mobile(@PathVariable operation: PaymentOperation, @Valid @RequestBody request: PaymentRequest) = payments.submit(PaymentChannel.MOBILE, operation, request)
-    @PostMapping("/pos/transactions/{operation}") @ResponseStatus(HttpStatus.CREATED)
-    fun pos(@PathVariable operation: PaymentOperation, @Valid @RequestBody request: PaymentRequest) = payments.submit(PaymentChannel.POS, operation, request)
-    @PostMapping("/transactions/{operation}") @ResponseStatus(HttpStatus.CREATED)
-    fun canonical(@PathVariable operation: PaymentOperation, @Valid @RequestBody request: PaymentRequest) = payments.submit(if (request.terminalId.isNullOrBlank()) PaymentChannel.MOBILE else PaymentChannel.POS, operation, request)
+class GatewayController(
+    private val payments: PersistentPaymentService,
+    private val developerAuth: DeveloperAuthService,
+    private val apps: DeveloperAppRepository,
+    private val merchants: MerchantRepository
+) {
+    private fun authorizePurchase(authorization: String?, merchantId: String) {
+        val token = authorization?.removePrefix("Bearer ") ?: throw SecurityException("API key is required")
+        val appId = developerAuth.validate(token) ?: throw SecurityException("API key is invalid or expired")
+        val app = apps.findById(appId).orElseThrow { SecurityException("Integration application is not available") }
+        val merchant = merchants.findByMerchantId(merchantId) ?: throw SecurityException("Merchant is not available")
+        require(merchant.workspaceId == app.organizationId) { "This API key is not authorized for the merchant" }
+    }
+    /** Gateway is an execution boundary. Developer accounts, keys and dashboards belong to the Portal. */
+    @PostMapping("/mobile/transactions/purchase") @ResponseStatus(HttpStatus.CREATED)
+    fun mobilePurchase(@RequestHeader("Authorization", required = false) authorization: String?, @Valid @RequestBody request: PaymentRequest): PaymentResponse { authorizePurchase(authorization, request.merchantId); return payments.submit(PaymentChannel.MOBILE, PaymentOperation.PURCHASE, request) }
+    @PostMapping("/transactions/purchase") @ResponseStatus(HttpStatus.CREATED)
+    fun purchase(@RequestHeader("Authorization", required = false) authorization: String?, @Valid @RequestBody request: PaymentRequest): PaymentResponse { authorizePurchase(authorization, request.merchantId); return payments.submit(if (request.terminalId.isNullOrBlank()) PaymentChannel.MOBILE else PaymentChannel.POS, PaymentOperation.PURCHASE, request) }
     @GetMapping("/transactions/{id}") fun transaction(@PathVariable id: String) = payments.get(id)
     @GetMapping("/transactions/{id}/timeline") fun timeline(@PathVariable id: String) = payments.timeline(id)
-    @GetMapping("/admin/transactions") fun adminTransactions() = payments.adminTransactions()
-    @GetMapping("/admin/settlements") fun adminSettlements() = payments.adminSettlements()
-    @GetMapping("/admin/fees") fun adminFees() = payments.adminFees()
-    @PostMapping("/settlements/{merchantId}/{businessDate}") fun settlement(@PathVariable merchantId: String, @PathVariable businessDate: LocalDate) = payments.settlementResponse(merchantId, businessDate)
 }
 
 @RestControllerAdvice

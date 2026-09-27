@@ -1,5 +1,7 @@
 # Local bank-test environment
 
+For the current Developer Portal, run `node developer-portal/start-local.mjs` from the repository root. Open http://localhost:8082, create an account, and create an application to test purchases. See `developer-portal/README.md` for the authoritative runbook. The older addresses below include legacy services that are no longer launched by the local script.
+
 1. Copy `.env.example` to `.env` and replace every placeholder with a local secret. Never commit `.env`.
 2. Start Docker Desktop.
 3. Run `docker compose up --build` from this repository root.

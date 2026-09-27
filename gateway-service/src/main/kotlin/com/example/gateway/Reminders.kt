@@ -41,16 +41,12 @@ class ReminderService(private val reminders: OperationalReminderRepository) {
 @Component @EnableScheduling
 class OperationalReminderScheduler(
     private val reversalJobs: ReversalJobRepository,
-    private val fraudCases: FraudCaseRepository,
-    private val cardOrders: CardPersonalizationOrderRepository,
     private val reminderService: ReminderService
 ) {
     /** Produces work items only; it never retries or changes a financial transaction itself. */
     @Scheduled(fixedDelayString = "\${gateway.reminders.interval-ms:60000}")
     fun createOperationalReminders() {
         reversalJobs.findAll().filter { it.status in setOf(ReversalJobStatus.PENDING, ReversalJobStatus.EXCEPTION) }.forEach { reminderService.open(ReminderType.REVERSAL_RECOVERY, it.id!!, "Reversal for ${it.originalTransactionId} needs recovery", it.nextAttemptAt) }
-        fraudCases.findAll().filter { it.status in setOf(FraudCaseStatus.OPEN, FraudCaseStatus.UNDER_REVIEW) }.forEach { reminderService.open(ReminderType.FRAUD_REVIEW, it.id!!, "Fraud case ${it.ruleCode} requires review") }
-        cardOrders.findAll().filter { it.status in setOf(CardPersonalizationStatus.REQUESTED, CardPersonalizationStatus.APPROVED, CardPersonalizationStatus.QUEUED) }.forEach { reminderService.open(ReminderType.CARD_PERSONALIZATION, it.id, "Card order ${it.id} is awaiting personalization or activation") }
     }
 }
 

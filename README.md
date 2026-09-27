@@ -1,5 +1,11 @@
 # APS Acquirer Platform
 
+## Current developer Portal
+
+The Portal now has its own Node 24 backend and persistent database. Run `node developer-portal/start-local.mjs` from this folder, then open **http://localhost:8082** and create an email/password account. See [developer-portal/README.md](developer-portal/README.md) for the current API, tests, Google OAuth setup, and live-processing limitations.
+
+The local flow is Portal registration → application → test key → purchase → authenticated Gateway sandbox execution → stored response, status, timeline, and webhook events. The former anonymous Gateway and developer endpoints are blocked; the current private execution endpoint uses a generated service credential. The older architecture notes below describe legacy modules retained in the repository, not the current Portal run path.
+
 Acquirer-only payments platform. `authService` manages portal identity. `gateway-service` owns payment processing, merchant and terminal estate, settlements and reconciliation. `AUTH-FRONTEND` is the operations portal. `developer-portal` is partner documentation. `mobile_app` is the mobile channel. `pos_app` is the terminal channel.
 
 ## What this project does

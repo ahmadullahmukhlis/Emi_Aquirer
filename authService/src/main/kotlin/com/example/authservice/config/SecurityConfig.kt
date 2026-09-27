@@ -42,16 +42,12 @@ class SecurityConfig(
 
                     // public endpoints
                     .requestMatchers(
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-ui.html",
                         "/error",
                         "/login",
-                        "/logout",
-                        "/account/**",
-                        "/users/**"
+                        "/logout"
                     ).permitAll()
-
+                    .requestMatchers("/account/**").denyAll()
+                    .requestMatchers("/users", "/users/**").hasAnyAuthority("ADMIN", "SUPER_ADMIN")
                     .anyRequest().authenticated()
             }
             .exceptionHandling {

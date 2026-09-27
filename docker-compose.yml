@@ -1,17 +1,4 @@
 services:
-  auth-db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_DB: auth_db
-      POSTGRES_USER: ${POSTGRES_USER:-gateway}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
-    volumes: [auth-db-data:/var/lib/postgresql/data]
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
-      interval: 5s
-      timeout: 3s
-      retries: 20
-
   gateway-db:
     image: postgres:16-alpine
     environment:
@@ -25,19 +12,6 @@ services:
       timeout: 3s
       retries: 20
 
-  auth-service:
-    build: ./authService
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://auth-db:5432/auth_db
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-gateway}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      JWT_AUTH_SECRET: ${JWT_AUTH_SECRET:?set JWT_AUTH_SECRET in .env}
-      JWT_ENCRYPTION_SECRET: ${JWT_ENCRYPTION_SECRET:?set JWT_ENCRYPTION_SECRET in .env}
-      APP_CORS_ALLOWED_ORIGINS: http://localhost:8082,http://localhost:8083
-    depends_on:
-      auth-db: { condition: service_healthy }
-    ports: ["8080:8080"]
-
   gateway-service:
     build: ./gateway-service
     environment:
@@ -49,20 +23,23 @@ services:
       GATEWAY_SWITCH_PORT: ${GATEWAY_SWITCH_PORT:-0}
       GATEWAY_SWITCH_TLS: ${GATEWAY_SWITCH_TLS:-false}
       GATEWAY_CORS_ALLOWED_ORIGINS: http://localhost:8082,http://localhost:8083
+      PORTAL_GATEWAY_KEY: ${PORTAL_GATEWAY_KEY:?set PORTAL_GATEWAY_KEY}
     depends_on:
       gateway-db: { condition: service_healthy }
-    ports: ["8081:8081"]
+    ports: ["127.0.0.1:8081:8081"]
 
   developer-portal:
     build: ./developer-portal
     depends_on: [gateway-service]
-    ports: ["8082:80"]
-
-  admin-portal:
-    build: ./AUTH-FRONTEND
-    depends_on: [auth-service]
-    ports: ["8083:80"]
+    environment:
+      PORTAL_GATEWAY_URL: http://gateway-service:8081/api/gateway
+      PORTAL_GATEWAY_KEY: ${PORTAL_GATEWAY_KEY:?set PORTAL_GATEWAY_KEY}
+      PORTAL_PUBLIC_URL: ${PORTAL_PUBLIC_URL:-http://localhost:8082}
+      PORTAL_GOOGLE_CLIENT_ID: ${PORTAL_GOOGLE_CLIENT_ID:-}
+      PORTAL_GOOGLE_CLIENT_SECRET: ${PORTAL_GOOGLE_CLIENT_SECRET:-}
+    volumes: [portal-data:/data]
+    ports: ["8082:8082"]
 
 volumes:
-  auth-db-data:
   gateway-db-data:
+  portal-data:
