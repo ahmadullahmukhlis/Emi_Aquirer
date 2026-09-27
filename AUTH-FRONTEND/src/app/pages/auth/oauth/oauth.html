@@ -1,0 +1,82 @@
+<div class="page">
+  @if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
+  }
+
+  <div class="grid">
+    <div class="card">
+      <h3>Authorize URL</h3>
+      <app-dynamic-form-builder
+        [fields]="authorizeFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="buildAuthorizeUrl($event)"
+      ></app-dynamic-form-builder>
+      @if (authorizeUrl) {
+        <div class="output">
+          <strong>URL</strong>
+          <div class="mono">{{ authorizeUrl }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="card">
+      <h3>Client Assertion Generator</h3>
+      <app-dynamic-form-builder
+        [fields]="assertionFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="generateAssertion($event)"
+      ></app-dynamic-form-builder>
+      @if (generatedAssertion) {
+        <div class="output">
+          <strong>Assertion</strong>
+          <pre class="mono">{{ generatedAssertion }}</pre>
+        </div>
+      }
+    </div>
+
+    <div class="card">
+      <h3>Client Credentials Token</h3>
+      <app-dynamic-form-builder
+        [fields]="clientCredentialsFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="submitClientCredentials($event)"
+      ></app-dynamic-form-builder>
+    </div>
+
+    <div class="card">
+      <h3>Authorization Code Token</h3>
+      <app-dynamic-form-builder
+        [fields]="authCodeFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="submitAuthCode($event)"
+      ></app-dynamic-form-builder>
+    </div>
+
+    <div class="card">
+      <h3>Introspect Token</h3>
+      <app-dynamic-form-builder
+        [fields]="introspectFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="submitIntrospect($event)"
+      ></app-dynamic-form-builder>
+      @if (introspectResponse) {
+        <div class="output">
+          <strong>Result</strong>
+          <pre class="mono">{{ introspectResponse  }}</pre>
+        </div>
+      }
+    </div>
+
+    @if (tokenResponse) {
+      <div class="card">
+        <h3>Token Response</h3>
+        <pre class="mono">{{ tokenResponse  }}</pre>
+      </div>
+    }
+  </div>
+</div>

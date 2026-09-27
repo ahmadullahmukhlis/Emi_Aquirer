@@ -1,0 +1,23 @@
+/* Smooth transitions */
+header {
+  transition-property: margin-left;
+}
+
+/* Custom shadow for dropdowns */
+.shadow-xl {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header {
+    margin-left: 0 !important;
+  }
+
+  .hidden-on-mobile {
+    display: none;
+  }
+}
+
+header .text-lg { font-size: .9rem; }
+header button { min-width: 1.65rem; min-height: 1.65rem; }

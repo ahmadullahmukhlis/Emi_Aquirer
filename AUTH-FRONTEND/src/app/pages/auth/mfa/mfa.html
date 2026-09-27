@@ -1,0 +1,53 @@
+<div class="page">
+  @if (message) {
+    <div class="notice">{{ message }}</div>
+  }
+
+  <div class="grid">
+    <div class="card">
+      <h3>MFA Setup</h3>
+      <button class="btn" (click)="setupMfa()">Generate MFA Secret</button>
+      @if (mfaSetupResult) {
+        <div class="output">
+          <div><strong>Secret</strong></div>
+          <div class="mono">{{ mfaSetupResult.secret }}</div>
+          <div class="spacer"></div>
+          <div><strong>OTP Auth URI</strong></div>
+          <div class="mono">{{ mfaSetupResult.otpauth }}</div>
+        </div>
+      }
+      <div class="spacer"></div>
+      <app-dynamic-form-builder
+        [fields]="mfaVerifyFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="verifyMfa($event)"
+      ></app-dynamic-form-builder>
+      <div class="spacer"></div>
+      <app-dynamic-form-builder
+        [fields]="mfaVerifyFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="disableMfa($event)"
+      ></app-dynamic-form-builder>
+    </div>
+
+    <div class="card">
+      <h3>Email Verification</h3>
+      <button class="btn" (click)="requestEmailCode()">Request Verification Code</button>
+      @if (emailCodeResult) {
+        <div class="output">
+          <div><strong>Code</strong></div>
+          <div class="mono">{{ emailCodeResult.code }}</div>
+        </div>
+      }
+      <div class="spacer"></div>
+      <app-dynamic-form-builder
+        [fields]="emailVerifyFields"
+        [action]="''"
+        [method]="'POST'"
+        (formSubmitted)="confirmEmail($event)"
+      ></app-dynamic-form-builder>
+    </div>
+  </div>
+</div>

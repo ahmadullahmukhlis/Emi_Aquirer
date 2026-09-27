@@ -1,0 +1,16 @@
+<div>
+  <p-multiselect
+    [options]="options"
+    [optionLabel]="optionLabel"
+    [optionValue]="optionValue"
+    [placeholder]="placeholder"
+    [showClear]="showClear"
+    [filter]="isSearable"
+    [maxSelectedLabels]="3"
+    [(ngModel)]="selected"
+    (onChange)="onSelectChange($event)"
+    [disabled]="disabled"
+    class="w-full"
+    appendTo="body"
+  ></p-multiselect>
+</div>

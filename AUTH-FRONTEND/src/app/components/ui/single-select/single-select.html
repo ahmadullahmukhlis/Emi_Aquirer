@@ -1,0 +1,16 @@
+<div>
+  <p-select
+    [options]="options"
+    [optionLabel]="optionLabel"
+    [optionValue]="optionValue"
+    [showClear]="showClear"
+    [checkmark]="showClear"
+    [placeholder]="placeholder"
+    class="w-full"
+    appendTo="body"
+    [(ngModel)]="selected"
+    (onChange)="onSelectChange($event)"
+    [filter]="isSearable"
+    [disabled]="disabled"
+  ></p-select>
+</div>

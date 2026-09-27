@@ -1,0 +1,32 @@
+<p-confirmDialog #cd key="confirm-action">
+    <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
+      <div class="flex flex-col items-center p-8 bg-white rounded shadow-lg transform transition-all duration-300 ease-out animate-fadeIn">
+        
+        <!-- Icon -->
+        <div class="rounded-full bg-red-100 text-red-600 inline-flex justify-center items-center h-24 w-24 -mt-20 shadow">
+          <i [class]="message.icon || 'pi pi-exclamation-triangle'" style="font-size: 38px;"></i>
+        </div>
+  
+        <!-- Header -->
+        <span class="font-semibold text-2xl text-gray-800 mt-6 mb-2">
+          {{ message.header || (message.actionLabel || "Confirmation") }}
+        </span>
+  
+        <!-- Message -->
+        <p class="text-md text-gray-600 text-center">
+          {{ message.message || 'Are you sure you want to perform this action?' }}
+        </p>
+  
+        <!-- Buttons -->
+        <div class="flex justify-between gap-12 mt-6">
+          <p-button label="Cancel" [outlined]="true" (onClick)="onReject()" styleClass="w-32 p-button-secondary"></p-button>
+          <p-button 
+            [label]="message.actionLabel || 'Confirm'" 
+            (onClick)="onAccept()" 
+            [styleClass]="message.actionLabel === 'Delete' ? 'w-32 p-button-danger' : 'w-32 p-button-primary'">
+          </p-button>
+        </div>
+      </div>
+    </ng-template>
+  </p-confirmDialog>
+  

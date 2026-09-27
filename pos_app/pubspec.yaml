@@ -1,0 +1,17 @@
+name: afpay_pos
+description: Merchant POS companion for the APS gateway.
+publish_to: none
+version: 1.0.0+1
+environment:
+  sdk: ^3.8.0
+dependencies:
+  flutter:
+    sdk: flutter
+  dio: ^5.11.1
+  flutter_secure_storage: ^11.2.0
+  flutter_tts: ^4.2.3
+  cupertino_icons: ^1.0.8
+dev_dependencies:
+  flutter_lints: ^5.0.0
+flutter:
+  uses-material-design: true

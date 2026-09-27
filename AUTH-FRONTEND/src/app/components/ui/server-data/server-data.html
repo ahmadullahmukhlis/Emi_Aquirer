@@ -1,0 +1,23 @@
+<!-- Loading -->
+@if (loading && !data && !error) {
+  <div class="flex items-center justify-center" [class.h-32]="!disableDefaultHeight">
+    <div
+      class="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"
+    ></div>
+  </div>
+}
+
+<!-- Error -->
+@if (error) {
+  <app-error [error]="error" [size]="'sm'" (refresh)="loadData()"></app-error>
+}
+
+<!-- No Data -->
+@if (!loading && !error && !data) {
+  <div class="text-red-500 text-center py-12">No data found</div>
+}
+
+<!-- Content -->
+@if (!loading && data && template) {
+  <ng-container [ngTemplateOutlet]="template" [ngTemplateOutletContext]="{ $implicit: data }" />
+}

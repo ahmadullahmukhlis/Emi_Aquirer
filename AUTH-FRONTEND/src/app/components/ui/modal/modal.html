@@ -1,0 +1,36 @@
+@if(visible){
+<p-dialog
+  [visible]="visible"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="draggable"
+  [resizable]="false"
+  [styleClass]="widthClass + ' ' + heightClass"
+  [contentStyle]="{ 'overflow-y': 'auto', 'max-height': 'calc(100vh - 150px)' }"
+>
+
+  <!-- HEADER -->
+  <ng-template pTemplate="header">
+    <div class="flex justify-between items-center w-full">
+      <h3 class="text-lg font-semibold">{{ title }}</h3>
+
+      <!-- X BUTTON -->
+      <button
+        type="button"
+        (click)="closeClicked()"
+        class="text-gray-500 hover:text-red-600 text-xl font-bold"
+      >
+        ×
+      </button>
+    </div>
+  </ng-template>
+
+  <!-- BODY -->
+  <ng-template pTemplate="body">
+    <div class="modal-content">
+      <ng-content></ng-content>
+    </div>
+  </ng-template>
+
+</p-dialog>
+}

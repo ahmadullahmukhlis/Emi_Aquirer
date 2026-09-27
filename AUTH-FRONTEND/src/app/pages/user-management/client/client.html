@@ -1,0 +1,28 @@
+
+<app-datatable
+  [url]="'client'"
+  [config]="tableConfig"
+  tableName="CLients-table"
+  (onRowClick)="handleRowClick($event)"
+  (onRowSelect)="handleRowSelect($event)"
+  (onAdd)="handleAdd()"
+  (onEdit)="handleEdit($event)"
+  (onDelete)="handleDelete($event)"
+  (onExport)="handleExport($event)"
+  (tableEvent)="handleTableEvent($event)"
+  [name]="'CLients Table'"
+>
+</app-datatable>
+<app-modal [visible]="addCLient" title="Add Client "  (onClose)="handleClose()" >
+   <app-dynamic-form-builder
+    [className]="'grid grid-cols-2 gap-4'"
+    [fields]="fields"
+    [action]="`client`"
+    method="POST"
+    [needConfirmation]="false"
+    (submitCompleted)="handleSubmit()"
+    
+
+  ></app-dynamic-form-builder>
+
+</app-modal>

@@ -1,0 +1,22 @@
+<div class="page">
+  <app-datatable
+    [url]="'/permissions'"
+    [name]="'permissions'"
+    [tableName]="'permissions-table'"
+    [config]="tableConfig"
+  ></app-datatable>
+
+  <app-modal
+    [visible]="showModal"
+    [title]="isEdit ? 'Edit Permission' : 'Create Permission'"
+    [widthClass]="'w-[700px]'"
+    (onClose)="closeModal()"
+  >
+    <app-dynamic-form-builder
+      [fields]="fields"
+      [action]="''"
+      [method]="isEdit ? 'PUT' : 'POST'"
+      (formSubmitted)="submit($event)"
+    ></app-dynamic-form-builder>
+  </app-modal>
+</div>

@@ -1,0 +1,51 @@
+<div class="flex flex-col items-center gap-2">
+  <!-- Image Preview / Upload -->
+  <div
+    class="w-32 h-32 rounded-full overflow-hidden border border-gray-300 flex items-center justify-center bg-gray-100 cursor-pointer"
+    (click)="openFileDialog(fileInput)"
+  >
+    @if (preview) {
+      <img [src]="preview" class="w-full h-full object-cover" />
+    }
+    @if (!preview) {
+      <span class="text-gray-400">Click to upload</span>
+    }
+    <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+  </div>
+
+  <!-- Cropper Dialog -->
+  <!-- Cropper Dialog -->
+  @if (showCropper) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-4 rounded shadow-lg flex flex-col items-center gap-2">
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="1 / 1"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+      ></image-cropper>
+
+      <div class="flex gap-2 mt-2">
+        <!-- Cancel Button: always available -->
+        <button
+          type="button"
+          class="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+          (click)="cropperCancel()"
+        >
+          Cancel
+        </button>
+
+        <!-- Done Button: only if a cropped image exists -->
+        <button
+          type="button"
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
+          (click)="cropperDone()"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+    </div>
+  }
+</div>

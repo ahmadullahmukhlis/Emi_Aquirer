@@ -1,0 +1,22 @@
+<div class="page">
+  <app-datatable
+    [url]="'/client'"
+    [name]="'clients'"
+    [tableName]="'clients-table'"
+    [config]="clientTableConfig"
+  ></app-datatable>
+
+  <app-modal
+    [visible]="showClientModal"
+    [title]="isEdit ? 'Edit Client' : 'Create Client'"
+    [widthClass]="'w-[900px]'"
+    (onClose)="closeModal()"
+  >
+    <app-dynamic-form-builder
+      [fields]="clientFields"
+      [action]="''"
+      [method]="isEdit ? 'PUT' : 'POST'"
+      (formSubmitted)="submitClient($event)"
+    ></app-dynamic-form-builder>
+  </app-modal>
+</div>

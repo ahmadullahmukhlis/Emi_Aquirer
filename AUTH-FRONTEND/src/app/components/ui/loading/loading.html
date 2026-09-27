@@ -1,0 +1,35 @@
+<div
+  class="flex flex-col items-center justify-center"
+  [class.py-16]="size === 'default'"
+  [class.py-12]="size === 'sm'"
+  [class.py-10]="size === 'xs'"
+>
+  <div class="relative">
+    <div
+      class="animate-spin rounded-full border-4 border-gray-200"
+      [class.h-12]="size === 'default'"
+      [class.w-12]="size === 'default'"
+      [class.h-10]="size === 'sm'"
+      [class.w-10]="size === 'sm'"
+      [class.h-8]="size === 'xs'"
+      [class.w-8]="size === 'xs'"
+    ></div>
+    <div
+      class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"
+      [class.h-8]="size === 'default'"
+      [class.w-8]="size === 'default'"
+      [class.h-6]="size === 'sm'"
+      [class.w-6]="size === 'sm'"
+      [class.h-5]="size === 'xs'"
+      [class.w-5]="size === 'xs'"
+    ></div>
+  </div>
+  <p
+    class="mt-4 text-gray-600 font-medium"
+    [class.text-base]="size === 'default'"
+    [class.text-sm]="size === 'sm'"
+    [class.text-xs]="size === 'xs'"
+  >
+    Loading data...
+  </p>
+</div>

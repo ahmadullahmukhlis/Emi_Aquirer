@@ -1,0 +1,252 @@
+<!-- Page Header -->
+
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  @for (stat of stats; track $index) {
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-200">
+      <div class="flex justify-between items-start">
+        <div>
+          <p class="text-sm text-gray-500 font-medium">{{ stat.title }}</p>
+          <p class="text-2xl font-bold text-gray-800 mt-2">{{ stat.value }}</p>
+          <div class="flex items-center mt-3">
+            <span
+              class="text-sm font-medium px-2 py-1 rounded"
+              [class.text-green-600]="stat.changeType === 'increase'"
+              [class.bg-green-50]="stat.changeType === 'increase'"
+              [class.text-red-600]="stat.changeType === 'decrease'"
+              [class.bg-red-50]="stat.changeType === 'decrease'"
+            >
+              <i
+                [class]="
+                  stat.changeType === 'increase' ? 'fas fa-arrow-up mr-1' : 'fas fa-arrow-down mr-1'
+                "
+              ></i>
+              {{ stat.change }}
+            </span>
+            <span class="text-gray-500 text-sm ml-2">{{ stat.period }}</span>
+          </div>
+        </div>
+        <div [class]="stat.bgColor + ' p-3 rounded-xl'">
+          <i [class]="stat.icon + ' ' + stat.iconColor + ' text-2xl'"></i>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg font-bold text-gray-800">Revenue Overview</h2>
+      <select
+        class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+      >
+        <option>Last 7 days</option>
+        <option>Last 30 days</option>
+        <option>Last 90 days</option>
+      </select>
+    </div>
+    <div
+      class="h-64 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg flex items-center justify-center"
+    >
+      <div class="text-center">
+        <i class="fas fa-chart-area text-4xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500 font-medium">Revenue chart visualization</p>
+        <p class="text-gray-400 text-sm mt-1">Click to interact with the chart</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
+      <div>
+        <p class="text-sm text-gray-500">Average Daily Revenue</p>
+        <p class="text-lg font-bold text-gray-800">$1,452</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Revenue Target</p>
+        <p class="text-lg font-bold text-gray-800">85%</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Growth</p>
+        <p class="text-lg font-bold text-green-600">+12.5%</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg font-bold text-gray-800">User Acquisition</h2>
+      <select
+        class="border border-gray-300 rounded-lg px-3 py-1.5 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white"
+      >
+        <option>This Month</option>
+        <option>Last Month</option>
+        <option>This Year</option>
+      </select>
+    </div>
+    <div
+      class="h-64 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg flex items-center justify-center"
+    >
+      <div class="text-center">
+        <i class="fas fa-chart-pie text-4xl text-blue-300 mb-4"></i>
+        <p class="text-gray-700 font-medium">User acquisition chart</p>
+        <p class="text-gray-500 text-sm mt-1">Pie chart showing user sources</p>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mt-6 pt-6 border-t border-gray-200">
+      <div>
+        <p class="text-sm text-gray-500">Organic Search</p>
+        <div class="flex items-center">
+          <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-green-500" style="width: 45%"></div>
+          </div>
+          <span class="ml-2 text-sm font-medium text-gray-800">45%</span>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Direct Traffic</p>
+        <div class="flex items-center">
+          <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-blue-500" style="width: 25%"></div>
+          </div>
+          <span class="ml-2 text-sm font-medium text-gray-800">25%</span>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Social Media</p>
+        <div class="flex items-center">
+          <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-purple-500" style="width: 18%"></div>
+          </div>
+          <span class="ml-2 text-sm font-medium text-gray-800">18%</span>
+        </div>
+      </div>
+      <div>
+        <p class="text-sm text-gray-500">Email Campaign</p>
+        <div class="flex items-center">
+          <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden mt-1">
+            <div class="h-full bg-orange-500" style="width: 12%"></div>
+          </div>
+          <span class="ml-2 text-sm font-medium text-gray-800">12%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+  <!-- Recent Activity -->
+  <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg font-bold text-gray-800">Recent Activity</h2>
+      <button class="text-sm text-primary-600 hover:text-primary-800 font-medium">View All</button>
+    </div>
+    <div class="space-y-4">
+      @for (activity of recentActivities; track $index) {
+        <div class="flex items-start p-4 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">
+          <div class="flex-shrink-0">
+            <div [class]="activity.bgColor + ' w-10 h-10 rounded-lg flex items-center justify-center shadow-sm'">
+              <i class="fas {{ activity.icon }} text-white"></i>
+            </div>
+          </div>
+          <div class="ml-4 flex-1">
+            <p class="font-medium text-gray-800">{{ activity.title }}</p>
+            <p class="text-sm text-gray-600 mt-1">{{ activity.description }}</p>
+          </div>
+          <div class="text-right">
+            <p class="text-sm text-gray-500">{{ activity.time }}</p>
+            <span [class]="activity.statusColor + ' inline-block mt-1 text-xs px-2 py-1 rounded-full font-medium'">
+              {{ activity.status }}
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Top Products -->
+  <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-lg font-bold text-gray-800">Top Products</h2>
+      <button class="text-sm text-primary-600 hover:text-primary-800 font-medium">See All</button>
+    </div>
+    <div class="space-y-4">
+      @for (product of topProducts; track $index) {
+        <div class="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+          <div>
+            <p class="font-medium text-gray-800">{{ product.name }}</p>
+            <p class="text-sm text-gray-500">{{ product.sales }} sales</p>
+          </div>
+          <div class="text-right">
+            <p class="font-medium text-gray-800">{{ product.revenue }}</p>
+            <p
+              class="text-sm"
+              [class.text-green-600]="product.growth.startsWith('+')"
+              [class.text-red-600]="product.growth.startsWith('-')"
+            >
+              {{ product.growth }}
+            </p>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="mt-6 pt-6 border-t border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm text-gray-500">Total Revenue</p>
+          <p class="text-xl font-bold text-gray-800">$54,240</p>
+        </div>
+        <div class="text-right">
+          <p class="text-sm text-gray-500">Avg. Sale</p>
+          <p class="text-xl font-bold text-gray-800">$43.20</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<button (click)="openModal()" class="bg-purple-500">open modal</button>
+
+<app-modal [visible]="isOpent" title="show test modal" (onClose)="closeModal()" widthClass="w-50%">
+  <app-dynamic-form-builder
+    [className]="'grid grid-cols-2 gap-4'"
+    [fields]="fields"
+    [action]="actionUrl"
+    method="POST"
+    [needConfirmation]="false"
+    [hiddenFields]="hiddenFields"
+    [beforeSubmit]="beforeSubmit"
+    (submitCompleted)="onSubmitCompleted($event)"
+    (valuesChanged)="onValuesChanged($event)"
+  ></app-dynamic-form-builder>
+</app-modal>
+<app-datatable
+  [url]="'/users'"
+  [config]="tableConfig"
+  tableName="users-table"
+  (onRowClick)="handleRowClick($event)"
+  (onRowSelect)="handleRowSelect($event)"
+  (onAdd)="handleAdd()"
+  (onEdit)="handleEdit($event)"
+  (onDelete)="handleDelete($event)"
+  (onExport)="handleExport($event)"
+  (tableEvent)="handleTableEvent($event)"
+  [name]="'Users Table'"
+>
+</app-datatable>
+
+<app-server-data url="/users" id="users-table">
+  <ng-template let-data>
+    @for (user of data; track $index) {
+      <div>{{ user.name }}</div>
+    }
+    <ol>
+      @for (user of data; track $index) {
+        <li>{{ user.id }} {{ user.name }}</li>
+      }
+    </ol>
+
+    <button class="bg-primary text-2xl p-2.5 bg-amber-600" (click)="reloadData()">
+      reload Data
+    </button>
+  </ng-template>
+</app-server-data>

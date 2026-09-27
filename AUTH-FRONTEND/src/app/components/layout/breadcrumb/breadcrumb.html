@@ -1,0 +1,16 @@
+<nav class="hidden md:flex items-center gap-1.5 text-xs text-gray-600">
+  @for (item of breadcrumb$(); track item.route; let last = $last) {
+    @if (!last) {
+      <a [routerLink]="item.route" class="hover:text-primary-600 transition-colors">
+        {{ item.label }}
+      </a>
+
+      <!-- Modernized icon with better spacing -->
+      <i class="fas fa-chevron-right text-[10px] opacity-50" aria-hidden="true"></i>
+    } @else {
+      <span class="text-gray-900 font-semibold" aria-current="page">
+        {{ item.label }}
+      </span>
+    }
+  }
+</nav>

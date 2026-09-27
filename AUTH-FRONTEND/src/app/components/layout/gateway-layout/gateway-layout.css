@@ -1,0 +1,21 @@
+:host { display: block; }
+.gateway-layout { min-height: 100%; max-width: 1680px; margin: auto; padding: 1rem 1.25rem 2rem; color: #172b4d; background: #f6f8fb; }
+.gateway-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-bottom: .8rem; }
+.title-row { display: flex; align-items: center; gap: .8rem; }
+.gateway-header h1 { font-size: 1.25rem; letter-spacing: -.02em; margin: 0; color: #102a43; }
+.environment { display: inline-flex; align-items: center; gap: .35rem; border: 1px solid #b7e4d4; border-radius: 999px; padding: .28rem .55rem; color: #087f5b; background: #ecfdf5; font-size: .65rem; font-weight: 800; letter-spacing: .08em; }
+.environment i { width: 6px; height: 6px; border-radius: 50%; background: #12b886; }
+.gateway-actions { display: flex; align-items: center; gap: .6rem; }
+.gateway-actions button { border: 1px solid #dbe4ee; border-radius: .5rem; background: #fff; color: #52657a; padding: .62rem .78rem; font-size: .75rem; cursor: pointer; }
+.gateway-actions button i, .gateway-context i { margin-right: .35rem; color: #1976a8; }
+.sync-state { color: #087f5b; font-size: .75rem; font-weight: 700; }
+.sync-state i { margin-right: .3rem; }
+.icon-button { position: relative; width: 2.3rem; height: 2.3rem; padding: 0 !important; }
+.icon-button b { position: absolute; top: -.35rem; right: -.3rem; min-width: 1rem; border-radius: 1rem; background: #d9485f; color: white; font-size: .6rem; }
+.gateway-context { display: flex; gap: 1.6rem; padding: .65rem 0; border-top: 1px solid #e5ebf2; border-bottom: 1px solid #e5ebf2; color: #718096; font-size: .72rem; }
+.gateway-context .secure { color: #087f5b; }
+.gateway-nav { display: flex; gap: .15rem; flex-wrap: wrap; margin: .2rem 0 1rem; padding: .2rem; border: 1px solid #e1e8f0; border-radius: .5rem; background: #fff; box-shadow: 0 2px 8px rgba(16,42,67,.035); }
+.gateway-nav a { border-radius: .35rem; padding: .46rem .62rem; color: #60758a; text-decoration: none; font-size: .68rem; font-weight: 700; white-space: nowrap; }
+.gateway-nav a:hover { color: #1976a8; background: #f1f7fb; }
+.gateway-nav a.active { color: #fff; background: #123b70; box-shadow: 0 2px 6px rgba(18,59,112,.2); }
+@media (max-width: 900px) { .gateway-layout { padding: .75rem; } .gateway-nav { overflow-x: auto; flex-wrap: nowrap; } }

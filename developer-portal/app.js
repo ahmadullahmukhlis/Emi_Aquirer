@@ -1,0 +1,1 @@
+document.querySelectorAll('nav button').forEach((button) => button.addEventListener('click', () => { document.querySelectorAll('nav button,.page').forEach((node) => node.classList.remove('active')); button.classList.add('active'); document.getElementById(button.dataset.page).classList.add('active'); }));

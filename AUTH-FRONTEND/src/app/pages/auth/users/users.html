@@ -1,0 +1,22 @@
+<div class="page">
+  <app-datatable
+    [url]="'/users'"
+    [name]="'users'"
+    [tableName]="'users-table'"
+    [config]="userTableConfig"
+  ></app-datatable>
+
+  <app-modal
+    [visible]="showUserModal"
+    [title]="isEdit ? 'Edit User' : 'Create User'"
+    [widthClass]="'w-[900px]'"
+    (onClose)="closeModal()"
+  >
+    <app-dynamic-form-builder
+      [fields]="userFields"
+      [action]="actionUrl"
+      [method]="method"
+      (submitCompleted)="onSubmit()"
+    ></app-dynamic-form-builder>
+  </app-modal>
+</div>

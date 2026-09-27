@@ -1,0 +1,22 @@
+<div class="min-h-screen bg-gray-50 overflow-x-hidden">
+  <!-- Sidebar -->
+  @if (!isMobile) {
+    <app-sidebar></app-sidebar>
+  }
+
+  <!-- Header -->
+  <app-header></app-header>
+
+  <!-- Main Content -->
+  <main
+    class="transition-all duration-300 ease-in-out p-1 min-h-screen overflow-x-hidden"
+    [class.ml-52]="!isCollapsed && !isMobile"
+    [class.ml-14]="isCollapsed && !isMobile"
+    [class.ml-0]="isMobile"
+  >
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-delete-confirmation></app-delete-confirmation>
+  <app-toast></app-toast>
+</div>

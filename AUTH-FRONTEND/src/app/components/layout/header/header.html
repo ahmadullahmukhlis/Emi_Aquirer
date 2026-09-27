@@ -1,0 +1,206 @@
+<header
+  class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm transition-all duration-300 ease-in-out"
+  [class.ml-52]="!isSidebarCollapsed()"
+  [class.ml-14]="isSidebarCollapsed()"
+>
+  <div class="px-3 py-1.5 flex items-center justify-between">
+    <!-- Left side: Menu toggle and breadcrumb -->
+    <div class="flex items-center space-x-2">
+      <app-breadcrumb />
+    </div>
+
+    <!-- Right side: Actions and user menu -->
+    <div class="flex items-center space-x-2">
+      <!-- Search -->
+      <div class="hidden lg:block relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <i class="fas fa-search text-gray-400"></i>
+        </div>
+        <input
+          type="text"
+          class="pl-8 pr-2 py-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent w-44 text-[11px]"
+          placeholder="Search transactions..."
+        />
+      </div>
+
+      <!-- Quick actions -->
+      <div class="flex items-center space-x-1">
+        <button
+          class="p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+          (click)="reloadData()"
+        >
+          <i class="fas fa-sync-alt"></i>
+        </button>
+
+        <!-- Notifications -->
+        <div class="relative">
+          <button
+            (click)="toggleNotifications($event)"
+            class="relative p-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded transition-colors"
+          >
+            <i class="fas fa-bell text-sm"></i>
+            <!-- Using the computed signal unreadCount() -->
+            @if (unreadCount() > 0) {
+              <span
+                class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center"
+              >
+                {{ unreadCount() }}
+              </span>
+            }
+          </button>
+
+          <!-- Notifications dropdown -->
+          @if (isNotificationsOpen()) {
+            <div
+              class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50"
+            >
+              <div class="p-4 border-b border-gray-200">
+                <div class="flex justify-between items-center">
+                  <h3 class="font-semibold text-gray-800">Notifications</h3>
+                  <span class="text-xs bg-primary-100 text-primary-800 px-2 py-1 rounded-full">
+                    {{ unreadCount() }} new
+                  </span>
+                </div>
+              </div>
+
+              <div class="max-h-96 overflow-y-auto">
+                <!-- Using @for loop for better performance in 2026 -->
+                @for (notification of notifications(); track notification.id) {
+                  <div
+                    class="p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                    [class.bg-blue-50]="!notification.read"
+                  >
+                    <div class="flex items-start">
+                      <div class="flex-shrink-0 pt-0.5">
+                        <div
+                          class="w-8 h-8 rounded-full flex items-center justify-center"
+                          [class.bg-blue-100]="!notification.read"
+                          [class.bg-gray-100]="notification.read"
+                        >
+                          <i
+                            class="fas text-sm {{ notification.icon }}"
+                            [class.text-blue-600]="!notification.read"
+                            [class.text-gray-500]="notification.read"
+                          ></i>
+                        </div>
+                      </div>
+                      <div class="ml-3 flex-1">
+                        <p class="text-sm font-medium text-gray-800">{{ notification.text }}</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ notification.time }}</p>
+                      </div>
+                      @if (!notification.read) {
+                        <button
+                          (click)="markAsRead(notification.id)"
+                          class="text-xs text-primary-600 hover:text-primary-800"
+                        >
+                          <i class="fas fa-check"></i>
+                        </button>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+
+              <div class="p-3 border-t border-gray-200 text-center">
+                <a href="#" class="text-sm text-primary-600 hover:text-primary-800 font-medium">
+                  View all notifications
+                </a>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Divider -->
+      <div class="h-4 w-px bg-gray-300"></div>
+
+      <!-- User menu -->
+      <div class="relative">
+        <button
+          (click)="toggleProfileMenu($event)"
+          class="flex items-center space-x-2 hover:bg-gray-100 rounded transition-colors p-0.5"
+        >
+          <div class="relative">
+            <div class="w-7 h-7 rounded-full bg-blue-700 text-white text-[10px] font-semibold flex items-center justify-center">
+              {{ authService.currentUser().initials }}
+            </div>
+            <div
+              class="absolute bottom-0 right-0 w-2 h-2 bg-green-500 rounded-full border border-white"
+            ></div>
+          </div>
+          <div class="text-left hidden lg:block">
+            <p class="text-xs font-medium text-gray-800">{{ authService.currentUser().name }}</p>
+            <p class="text-[10px] text-gray-500">{{ authService.currentUser().role }}</p>
+          </div>
+          <i class="fas fa-chevron-down text-gray-500 hidden lg:block"></i>
+        </button>
+
+        <!-- Profile dropdown -->
+        @if (isProfileMenuOpen()) {
+          <div
+            class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 z-50"
+          >
+            <div class="p-4 border-b border-gray-200">
+              <div class="flex items-center space-x-3">
+                <div class="w-11 h-11 rounded-full bg-blue-700 text-white text-sm font-semibold flex items-center justify-center flex-shrink-0">
+                  {{ authService.currentUser().initials }}
+                </div>
+
+                <!-- FIXED CONTAINER -->
+                <div class="flex-1 min-w-0">
+                  <p class="font-medium text-gray-800 text-sm truncate">{{ authService.currentUser().name }}</p>
+                  <p class="text-xs text-gray-500 truncate">{{ authService.currentUser().email }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="py-2">
+              <a
+                href="#"
+                class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-user mr-3 text-gray-500 w-5"></i>
+                <span>My Profile</span>
+              </a>
+              <a
+                href="#"
+                class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-cog mr-3 text-gray-500 w-5"></i>
+                <span>Account Settings</span>
+              </a>
+              <a
+                href="#"
+                class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-bell mr-3 text-gray-500 w-5"></i>
+                <span>Notifications</span>
+                <span class="ml-auto bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">{{
+                  unreadCount()
+                }}</span>
+              </a>
+            </div>
+
+            <div class="py-2 border-t border-gray-200">
+              <a
+                href="#"
+                class="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                <i class="fas fa-question-circle mr-3 text-gray-500 w-5"></i>
+                <span>Help & Support</span>
+              </a>
+              <a
+               (click)="logout()"
+                href="#"
+                class="flex items-center px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+              >
+                <i class="fas fa-sign-out-alt mr-3 w-5"></i>
+                <span>Logout</span>
+              </a>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</header>

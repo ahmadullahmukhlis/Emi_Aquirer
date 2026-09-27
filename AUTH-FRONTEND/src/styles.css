@@ -1,0 +1,8 @@
+/* You can add global styles to this file, and also import other style files */
+/* styles.css at src/ */
+@import 'primeicons/primeicons.css';
+
+@import 'tailwindcss';
+
+/* If your classes still aren't detected, explicitly tell Tailwind where to look: */
+@source "../src/**/*.{html,ts}";

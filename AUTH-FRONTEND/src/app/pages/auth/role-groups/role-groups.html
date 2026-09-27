@@ -1,0 +1,22 @@
+<div class="page">
+  <app-datatable
+    [url]="'/role-groups'"
+    [name]="'role-groups'"
+    [tableName]="'role-groups-table'"
+    [config]="tableConfig"
+  ></app-datatable>
+
+  <app-modal
+    [visible]="showModal"
+    [title]="isEdit ? 'Edit Role Group' : 'Create Role Group'"
+    [widthClass]="'w-[600px]'"
+    (onClose)="closeModal()"
+  >
+    <app-dynamic-form-builder
+      [fields]="fields"
+      [action]="''"
+      [method]="isEdit ? 'PUT' : 'POST'"
+      (formSubmitted)="submit($event)"
+    ></app-dynamic-form-builder>
+  </app-modal>
+</div>

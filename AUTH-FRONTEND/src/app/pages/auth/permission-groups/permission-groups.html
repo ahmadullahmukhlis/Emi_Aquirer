@@ -1,0 +1,22 @@
+<div class="page">
+  <app-datatable
+    [url]="'/permission-groups'"
+    [name]="'permission-groups'"
+    [tableName]="'permission-groups-table'"
+    [config]="tableConfig"
+  ></app-datatable>
+
+  <app-modal
+    [visible]="showModal"
+    [title]="isEdit ? 'Edit Permission Group' : 'Create Permission Group'"
+    [widthClass]="'w-[600px]'"
+    (onClose)="closeModal()"
+  >
+    <app-dynamic-form-builder
+      [fields]="fields"
+      [action]="''"
+      [method]="isEdit ? 'PUT' : 'POST'"
+      (formSubmitted)="submit($event)"
+    ></app-dynamic-form-builder>
+  </app-modal>
+</div>

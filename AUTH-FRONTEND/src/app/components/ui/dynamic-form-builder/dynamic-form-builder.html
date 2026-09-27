@@ -1,0 +1,253 @@
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <div [class]="className">
+    @for (field of visibleFields(); track field.name) {
+      <div [class]="field.className">
+        @if (field.type !== 'repeater') {
+          <label class="block mb-1 font-medium">{{ field.label }}</label>
+        }
+
+        @if (field.type === 'profile-image') {
+          <app-add-profile-image
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+            (valueChange)="handleSingleFileChange(field, $event)"
+          ></app-add-profile-image>
+        }
+        <!-- TEXT -->
+        @if (field.type === 'text') {
+          <input
+            pInputText
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder ?? field.label"
+            [disabled]="field.disabled ?? false"
+            class="w-full"
+            (blur)="form.get(field.name)?.markAsTouched()"
+          />
+        }
+
+        <!-- NUMBER -->
+        @if (field.type === 'number') {
+          <p-inputNumber
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? field.label"
+            class="w-full"
+            (onBlur)="form.get(field.name)?.markAsTouched()"
+          ></p-inputNumber>
+        }
+
+        <!-- PASSWORD -->
+        @if (field.type === 'password') {
+          <p-password
+            toggleMask
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? field.label"
+            (onBlur)="form.get(field.name)?.markAsTouched()"
+          ></p-password>
+        }
+
+        <!-- DATE -->
+        @if (field.type === 'date') {
+          <p-datePicker
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? field.label"
+            (onBlur)="form.get(field.name)?.markAsTouched()"
+          ></p-datePicker>
+        }
+
+        <!-- TEXTAREA -->
+        @if (field.type === 'textarea') {
+          <textarea
+            pTextarea
+            rows="4"
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+            [placeholder]="field.placeholder ?? field.label"
+            class="w-full"
+            (blur)="form.get(field.name)?.markAsTouched()"
+          ></textarea>
+        }
+
+        <!-- CHECKBOX -->
+        @if (field.type === 'checkbox') {
+          <p-checkbox
+            binary="true"
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+          ></p-checkbox>
+        }
+        @if (field.type === 'radio') {
+          <div class="flex flex-wrap gap-3">
+            @for (opt of field.options; track opt.value) {
+              <div class="flex items-center gap-2">
+                <p-radioButton
+                  [name]="field.name"
+                  [value]="opt[field.optionValue ?? 'value']"
+                  [formControlName]="field.name"
+                  [disabled]="field.disabled ?? false"
+                ></p-radioButton>
+
+                <label>
+                  {{ opt[field.optionLabel ?? 'label'] }}
+                </label>
+              </div>
+            }
+          </div>
+        }
+        @if (field.type === 'checkbox-group') {
+          <div class="flex flex-wrap gap-3">
+            @for (opt of field.options; track opt.value) {
+              <div class="flex items-center gap-2">
+                <p-checkbox
+                  [binary]="false"
+                  [value]="opt[field.optionValue ?? 'value']"
+                  [formControlName]="field.name"
+                  [disabled]="field.disabled ?? false"
+                ></p-checkbox>
+
+                <label>
+                  {{ opt[field.optionLabel ?? 'label'] }}
+                </label>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- SWITCH -->
+        @if (field.type === 'switch') {
+          <p-toggleSwitch
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+          ></p-toggleSwitch>
+        }
+
+        <!-- SELECT -->
+        @if (field.type === 'select') {
+          <p-select
+            [options]="field.options"
+            [formControlName]="field.name"
+            [disabled]="field.disabled ?? false"
+            [optionLabel]="field.optionLabel ?? 'id'"
+            [optionValue]="field.optionValue ?? 'id'"
+            [placeholder]="field.placeholder ?? 'Select'"
+            class="w-full"
+            appendTo="body"
+            (onBlur)="form.get(field.name)?.markAsTouched()"
+          ></p-select>
+        }
+
+        <!-- SERVER SELECT -->
+        @if (field.type === 'server-select') {
+          <app-single-select
+            [formControlName]="field.name"
+            [url]="field.url"
+            [optionLabel]="field.optionLabel ?? 'id'"
+            [optionValue]="field.optionValue ?? 'id'"
+            [placeholder]="field.placeholder ?? 'Select'"
+            [showClear]="true"
+            [isSearable]="true"
+            [multiple]="false"
+            (valueChange)="handleSelectChange(field, $event)"
+          ></app-single-select>
+        }
+
+        <!-- MULTI SELECT -->
+        @if (field.type === 'multi-select') {
+          <app-multi-selected
+            [formControlName]="field.name"
+            [url]="field.url ?? ''"
+            [optionLabel]="field.optionLabel ?? 'id'"
+            [optionValue]="field.optionValue ?? 'id'"
+            [placeholder]="field.placeholder ?? 'Select'"
+            (valueChange)="handleSelectChange(field, $event)"
+          ></app-multi-selected>
+        }
+
+        @if (field.type === 'editor') {
+          <p-editor
+            [formControlName]="field.name"
+            placeholder="Enter text here..."
+            [disabled]="field.disabled ?? false"
+            (onBlur)="form.get(field.name)?.markAsTouched()"
+          ></p-editor>
+        }
+
+        <!-- FILE -->
+        @if (field.type === 'file') {
+          <input
+            type="file"
+            [placeholder]="field.placeholder ?? 'select file'"
+            (change)="form.get(field.name)?.setValue($any($event.target).files[0])"
+            [disabled]="field.disabled ?? false"
+          />
+        }
+        @if (field.type === 'file-upload') {
+          <app-file-upload
+            [multiple]="field.multiple ?? false"
+            (fileChange)="handleFileChange(field, $event)"
+          ></app-file-upload>
+        }
+        @if (field.type === 'repeater') {
+          <app-multiple-record
+            [label]="field?.label"
+            [defaultValues]="form.get(field.name)?.value || []"
+            [field]="field"
+            (onChange)="form.get(field.name)?.setValue($event)"
+          />
+        }
+
+        <!-- DIV (Label only) -->
+        @if (field.type === 'div') {
+          <p>{{ field.label }}</p>
+        }
+
+        <!-- ERROR MESSAGES -->
+        @if (isInvalid(field.name)) {
+          <div class="text-red-600 text-sm mt-1">
+            @if (form.get(field.name)?.errors?.['required']) {
+              <small>{{ field.label || field.name }} is required</small>
+            }
+
+            @if (form.get(field.name)?.errors?.['minlength']) {
+              <small>
+                Minimum length is
+                {{ form.get(field.name)?.errors?.['minlength'].requiredLength }}
+              </small>
+            }
+
+            @if (form.get(field.name)?.errors?.['maxlength']) {
+              <small>
+                Maximum length is
+                {{ form.get(field.name)?.errors?.['maxlength'].requiredLength }}
+              </small>
+            }
+
+            @if (form.get(field.name)?.errors?.['pattern']) {
+              <small>Invalid format</small>
+            }
+
+            @if (form.get(field.name)?.errors?.['min']) {
+              <small> Minimum value is {{ form.get(field.name)?.errors?.['min'].min }} </small>
+            }
+
+            @if (form.get(field.name)?.errors?.['max']) {
+              <small> Maximum value is {{ form.get(field.name)?.errors?.['max'].max }} </small>
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- SUBMIT BUTTON -->
+  <div class="mt-4">
+    <button pButton type="submit" label="Submit" [loading]="loading" [disabled]="loading"></button>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  @if (progress) {
+    <p-progressBar [value]="percent"></p-progressBar>
+  }
+</form>

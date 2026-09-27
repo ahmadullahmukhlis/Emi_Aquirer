@@ -1,0 +1,60 @@
+# .env is deliberately tracked by user request; do not place production secrets in it.
+
+# Logs and runtime data
+*.log
+*.log.*
+*.pid
+*.sqlite
+*.sqlite3
+.local-logs/
+.local-data/
+logs/
+uploads/
+
+# Java, Kotlin, Maven, Gradle
+**/target/
+**/.gradle/
+**/build/
+*.class
+hs_err_pid*
+
+# Node and Angular
+**/node_modules/
+**/dist/
+**/.angular/
+**/.cache/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Flutter and Dart
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.pub/
+**/coverage/
+**/android/.gradle/
+**/android/app/build/
+**/ios/Pods/
+**/ios/.symlinks/
+
+# IDE and OS files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporary and generated files
+*.tmp
+*.bak
+*.swp
+*.zip
+generated/
+
+# Keep environment templates and the requested root .env
+!.env
+!.env.example
+!**/.env.example

@@ -1,0 +1,36 @@
+:host {
+  display: block;
+}
+
+.auth-data-table {
+  border-color: #b8cadb;
+  border-radius: 4px;
+  box-shadow: none;
+}
+
+.auth-data-table thead {
+  background: #1f639b;
+}
+
+.auth-data-table thead th,
+.auth-data-table thead th.bg-gray-50 {
+  background: #1f639b;
+  color: #ffffff;
+  border-right: 1px solid rgba(255, 255, 255, 0.24);
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.auth-data-table tbody tr:nth-child(even) {
+  background: #eef6fc;
+}
+
+.auth-data-table tbody td {
+  border-right: 1px solid #d3e0ea;
+  color: #243746;
+}
+
+.auth-data-table tbody tr {
+  min-height: 32px;
+}

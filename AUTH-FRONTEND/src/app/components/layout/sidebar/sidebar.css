@@ -1,0 +1,116 @@
+/* Custom sidebar styles */
+:host {
+  display: block;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Active link styles */
+.active-link {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  position: relative;
+}
+
+.active-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 60%;
+  background-color: #3b82f6;
+  border-radius: 0 4px 4px 0;
+}
+
+/* When collapsed, show active state differently */
+.w-20 .active-link::before {
+  height: 40px;
+  width: 4px;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Hover effects */
+.group:hover .group-hover\:text-primary-600 {
+  color: #3b82f6 !important;
+}
+
+/* Collapsed sidebar tooltip */
+.collapsed-tooltip {
+  position: relative;
+}
+
+.collapsed-tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 8px;
+  padding: 6px 12px;
+  background-color: #1f2937;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.collapsed-tooltip:hover::before {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 4px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #1f2937;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .w-52 {
+    width: 208px !important;
+  }
+
+  .w-14 {
+    width: 56px !important;
+  }
+}

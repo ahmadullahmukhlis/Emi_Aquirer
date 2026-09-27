@@ -1,0 +1,22 @@
+<div class="page">
+  <app-datatable
+    [url]="'/roles'"
+    [name]="'roles'"
+    [tableName]="'roles-table'"
+    [config]="tableConfig"
+  ></app-datatable>
+
+  <app-modal
+    [visible]="showModal"
+    [title]="isEdit ? 'Edit Role' : 'Create Role'"
+    [widthClass]="'w-[700px]'"
+    (onClose)="closeModal()"
+  >
+    <app-dynamic-form-builder
+      [fields]="fields"
+      [action]="''"
+      [method]="isEdit ? 'PUT' : 'POST'"
+      (formSubmitted)="submit($event)"
+    ></app-dynamic-form-builder>
+  </app-modal>
+</div>
