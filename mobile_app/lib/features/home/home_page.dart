@@ -9,56 +9,26 @@ import '../payments/send_money_page.dart';
 import '../payments/transaction_hub_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.client});
+  const HomePage({super.key, required this.client, this.onSeeAll});
   final GatewayClient client;
+  final VoidCallback? onSeeAll;
 
   @override
   Widget build(BuildContext context) => ListView(
     padding: const EdgeInsets.fromLTRB(18, 16, 18, 24),
     children: [
-      Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xff65cfff), AppColors.primary],
-              ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(Icons.spa, color: Colors.white),
-          ),
-          const SizedBox(width: 10),
-          const Expanded(
-            child: Text(
-              'AfPay',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-            ),
-          ),
-          IconButton(
-            onPressed: () => showComingSoon(context, 'Notifications'),
-            icon: const Badge(
-              smallSize: 8,
-              child: Icon(Icons.notifications_none_rounded),
-            ),
-          ),
-        ],
-      ),
-      const SizedBox(height: 12),
       Container(
-        height: 155,
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xff5469f7), Color(0xff087af3), Color(0xff00b9ef)],
+            colors: [Color(0xff075460), Color(0xff087b80), Color(0xff0a9b8f)],
           ),
           borderRadius: BorderRadius.circular(20),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x300867f2),
+              color: Color(0x30003947),
               blurRadius: 22,
               offset: Offset(0, 10),
             ),
@@ -92,7 +62,7 @@ class HomePage extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Spacer(),
+            SizedBox(height: 12),
             Align(
               alignment: Alignment.centerRight,
               child: Icon(Icons.account_balance_wallet, color: Colors.white70),
@@ -100,13 +70,15 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      const SizedBox(height: 14),
+      const SizedBox(height: 18),
+      const BankCardPreview(),
+      const SizedBox(height: 18),
       Row(
         children: [
           _Action(
             Icons.send_rounded,
             'Send',
-            Colors.blue,
+            AppColors.primary,
             () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => SendMoneyPage(client: client)),
@@ -127,7 +99,7 @@ class HomePage extends StatelessWidget {
           _Action(
             Icons.receipt_long,
             'Pay Bills',
-            Colors.blue,
+            AppColors.primary,
             () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => BillsPage(client: client)),
@@ -136,7 +108,7 @@ class HomePage extends StatelessWidget {
           _Action(
             Icons.grid_view_rounded,
             'More',
-            Colors.blue,
+            AppColors.primary,
             () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -147,7 +119,11 @@ class HomePage extends StatelessWidget {
         ],
       ),
       const SizedBox(height: 18),
-      SectionTitle('Recent Transactions', action: 'See All', onAction: () {}),
+      SectionTitle(
+        'Recent Transactions',
+        action: 'See All',
+        onAction: onSeeAll,
+      ),
       const SizedBox(height: 4),
       const PageCard(
         child: Column(
@@ -181,7 +157,7 @@ class HomePage extends StatelessWidget {
               'Money to Sarah',
               'Today, 09:50 AM',
               '- \$200.00',
-              Colors.blue,
+              AppColors.primary,
             ),
           ],
         ),

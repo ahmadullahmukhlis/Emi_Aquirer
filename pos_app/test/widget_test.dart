@@ -9,7 +9,7 @@ void main() {
   ) async {
     await tester.pumpWidget(const PosApp());
 
-    expect(find.text('AfPay POS'), findsOneWidget);
+    expect(find.text('MSHpay'), findsOneWidget);
     expect(find.text('Use sandbox test account'), findsOneWidget);
 
     await tester.tap(find.byKey(const Key('sandbox-login')));

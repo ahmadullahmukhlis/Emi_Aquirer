@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/app_theme.dart';
@@ -62,7 +63,7 @@ class _CardWalletPageState extends State<CardWalletPage> {
               'date': 'Just now',
               'amount': '${cardToWallet ? '+' : '-'} AFN ${_amount.text}',
               'method': card!['maskedPan'],
-              'reference': 'AfPay Wallet',
+              'reference': 'MSHpay Wallet',
             },
           ),
         ),
@@ -94,7 +95,7 @@ class _CardWalletPageState extends State<CardWalletPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(title)),
+    appBar: BankingHeader(title: Text(title)),
     body: Column(
       children: [
         Padding(
@@ -154,8 +155,8 @@ class _CardWalletPageState extends State<CardWalletPage> {
           const SizedBox(height: 5),
           Text(
             cardToWallet
-                ? 'Funds move from your card into your AfPay wallet.'
-                : 'Funds move from your AfPay wallet to your selected card.',
+                ? 'Funds move from your card into your MSHpay wallet.'
+                : 'Funds move from your MSHpay wallet to your selected card.',
             style: const TextStyle(color: AppColors.muted, fontSize: 12),
           ),
           const SizedBox(height: 15),
@@ -303,11 +304,11 @@ class _CardWalletPageState extends State<CardWalletPage> {
           children: [
             _Row(
               'From',
-              cardToWallet ? card!['maskedPan'].toString() : 'AfPay Wallet',
+              cardToWallet ? card!['maskedPan'].toString() : 'MSHpay Wallet',
             ),
             _Row(
               'To',
-              cardToWallet ? 'AfPay Wallet' : card!['maskedPan'].toString(),
+              cardToWallet ? 'MSHpay Wallet' : card!['maskedPan'].toString(),
             ),
             _Row('Amount', 'AFN ${_amount.text}', strong: true),
           ],

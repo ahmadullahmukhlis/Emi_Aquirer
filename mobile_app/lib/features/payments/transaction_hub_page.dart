@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 import '../../core/app_theme.dart';
 import '../../core/ui.dart';
 import '../../services/gateway_client.dart';
@@ -13,7 +14,7 @@ class TransactionHubPage extends StatelessWidget {
   final GatewayClient client;
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('All Transactions')),
+    appBar: BankingHeader(title: const Text('All Transactions')),
     body: ListView(
       padding: const EdgeInsets.all(18),
       children: [
@@ -40,7 +41,7 @@ class TransactionHubPage extends StatelessWidget {
               AppTile(
                 icon: Icons.account_balance_wallet_outlined,
                 title: 'Card to Wallet',
-                subtitle: 'Fund your AfPay wallet from a registered card',
+                subtitle: 'Fund your MSHpay wallet from a registered card',
                 onTap: () => Navigator.push(
                   context,
                   MaterialPageRoute(

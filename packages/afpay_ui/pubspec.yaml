@@ -1,0 +1,9 @@
+name: afpay_ui
+description: Shared visual foundation for MSHpay mobile and POS.
+publish_to: none
+version: 1.0.0
+environment:
+  sdk: ^3.8.0
+dependencies:
+  flutter:
+    sdk: flutter

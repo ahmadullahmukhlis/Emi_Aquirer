@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:afpay_ui/afpay_ui.dart';
+import '../../core/pos_navigation.dart';
 
 import '../../services/gateway_client.dart';
 
@@ -88,34 +90,56 @@ class _PosOperationsPageState extends State<PosOperationsPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('POS operations')),
-    body: ListView(
-      padding: const EdgeInsets.all(20),
-      children: [
-        DropdownButtonFormField<String>(
-          initialValue: _selected,
-          decoration: const InputDecoration(labelText: 'Operation'),
-          items: operations.keys
-              .map((name) => DropdownMenuItem(value: name, child: Text(name)))
-              .toList(),
-          onChanged: (value) => setState(() => _selected = value!),
+    appBar: const BankingHeader(title: Text('Operations')),
+    bottomNavigationBar: PosNavigation(
+      selectedIndex: 1,
+      onSelected: (_) => Navigator.pop(context),
+    ),
+    body: Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 680),
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            const Text(
+              'Merchant operations',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 6),
+            const Text(
+              'Choose a service and enter the transaction details.',
+              style: TextStyle(color: AppColors.muted),
+            ),
+            const SizedBox(height: 20),
+            DropdownButtonFormField<String>(
+              isExpanded: true,
+              initialValue: _selected,
+              decoration: const InputDecoration(labelText: 'Operation'),
+              items: operations.keys
+                  .map(
+                    (name) => DropdownMenuItem(value: name, child: Text(name)),
+                  )
+                  .toList(),
+              onChanged: (value) => setState(() => _selected = value!),
+            ),
+            const SizedBox(height: 12),
+            _Field(label: 'Terminal ID', controller: _terminal),
+            _Field(label: 'Merchant ID', controller: _merchant),
+            _Field(label: 'Amount (minor AFN)', controller: _amount),
+            _Field(label: 'Protected reader token', controller: _token),
+            _Field(label: 'Original transaction ID', controller: _original),
+            FilledButton(
+              onPressed: _busy ? null : _send,
+              child: Text(_busy ? 'Sending…' : 'Submit $_selected'),
+            ),
+            if (_message != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text(_message!),
+              ),
+          ],
         ),
-        const SizedBox(height: 12),
-        _Field(label: 'Terminal ID', controller: _terminal),
-        _Field(label: 'Merchant ID', controller: _merchant),
-        _Field(label: 'Amount (minor AFN)', controller: _amount),
-        _Field(label: 'Protected reader token', controller: _token),
-        _Field(label: 'Original transaction ID', controller: _original),
-        FilledButton(
-          onPressed: _busy ? null : _send,
-          child: Text(_busy ? 'Sending…' : 'Submit $_selected'),
-        ),
-        if (_message != null)
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
-            child: Text(_message!),
-          ),
-      ],
+      ),
     ),
   );
 }

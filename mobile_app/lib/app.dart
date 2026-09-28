@@ -12,7 +12,7 @@ class AcquirerMobile extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'AfPay Mobile',
+    title: 'MSHpay',
     theme: AppTheme.light,
     home: SplashPage(client: client ?? GatewayClient()),
   );

@@ -95,23 +95,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) => ListView(
     padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
     children: [
-      Row(
-        children: [
-          const Expanded(
-            child: Text(
-              'Transactions',
-              style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800),
-            ),
-          ),
-          IconButton(
-            onPressed: () => showComingSoon(context, 'Advanced filters'),
-            icon: const Icon(
-              Icons.filter_alt_outlined,
-              color: AppColors.primary,
-            ),
-          ),
-        ],
-      ),
       TextField(
         onChanged: (v) => setState(() => _query = v.trim().toLowerCase()),
         decoration: const InputDecoration(

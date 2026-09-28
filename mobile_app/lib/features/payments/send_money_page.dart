@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 import 'package:flutter/services.dart';
 
 import '../../core/app_theme.dart';
@@ -135,7 +136,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Send Money')),
+    appBar: BankingHeader(title: const Text('Send Money')),
     body: Column(
       children: [
         Padding(
@@ -394,7 +395,7 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
           SizedBox(width: 8),
           Expanded(
             child: Text(
-              'Your receiver card number is encrypted in transit and is not saved in AfPay history or storage.',
+              'Your receiver card number is encrypted in transit and is not saved in MSHpay history or storage.',
               style: TextStyle(fontSize: 11, color: AppColors.muted),
             ),
           ),

@@ -88,11 +88,6 @@ class ServicesPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
       children: [
-        const Text(
-          'Services',
-          style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(height: 14),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

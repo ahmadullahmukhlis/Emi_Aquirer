@@ -1,6 +1,6 @@
 {
-    "name": "afpay_pos",
-    "short_name": "afpay_pos",
+    "name": "MSHpay",
+    "short_name": "MSHpay",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

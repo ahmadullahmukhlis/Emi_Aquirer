@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:afpay_ui/afpay_ui.dart';
 
 import '../../core/app_theme.dart';
 import '../../services/gateway_client.dart';
@@ -62,6 +63,10 @@ class _PosLoginPageState extends State<PosLoginPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+    appBar: const BankingHeader(
+      title: Text('MSHpay'),
+      automaticallyImplyLeading: false,
+    ),
     body: SafeArea(
       child: Center(
         child: SingleChildScrollView(
@@ -71,14 +76,10 @@ class _PosLoginPageState extends State<PosLoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(
-                  Icons.point_of_sale_rounded,
-                  size: 64,
-                  color: PosColors.accent,
-                ),
+                const Center(child: BrandMark(size: 64, withContainer: true)),
                 const SizedBox(height: 18),
                 const Text(
-                  'AfPay POS',
+                  'Welcome back',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 28,

@@ -2,6 +2,85 @@ import 'package:flutter/material.dart';
 
 import 'app_theme.dart';
 
+class BankCardPreview extends StatelessWidget {
+  const BankCardPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(18),
+      gradient: const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [Color(0xff0a626b), Color(0xff003947), Color(0xff03555e)],
+      ),
+      border: Border.all(color: const Color(0xff3c8a8e)),
+      boxShadow: const [
+        BoxShadow(
+          color: Color(0x24002e3c),
+          blurRadius: 20,
+          offset: Offset(0, 8),
+        ),
+      ],
+    ),
+    child: DefaultTextStyle(
+      style: const TextStyle(color: Colors.white),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: .12),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    'Primary Card',
+                    style: TextStyle(fontSize: 11),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              const Text(
+                'VISA',
+                style: TextStyle(
+                  fontSize: 27,
+                  fontWeight: FontWeight.w900,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(Icons.sim_card_rounded, color: Color(0xffe0e3dc), size: 34),
+              Icon(Icons.contactless_outlined, color: Colors.white70, size: 28),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const FittedBox(
+            child: Text(
+              '****  ****  ****  3456',
+              style: TextStyle(fontSize: 19, letterSpacing: 2),
+            ),
+          ),
+          const SizedBox(height: 12),
+          const Text('12/28', style: TextStyle(fontSize: 13)),
+        ],
+      ),
+    ),
+  );
+}
+
 class SectionTitle extends StatelessWidget {
   const SectionTitle(this.title, {super.key, this.action, this.onAction});
   final String title;
@@ -126,7 +205,7 @@ void showComingSoon(BuildContext context, String feature) {
             ),
             const SizedBox(height: 7),
             Text(
-              'Manage $feature securely from AfPay.',
+              'Manage $feature securely from MSHpay.',
               textAlign: TextAlign.center,
               style: const TextStyle(color: AppColors.muted),
             ),

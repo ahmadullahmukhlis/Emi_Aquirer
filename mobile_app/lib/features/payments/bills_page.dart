@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 
 import '../../core/ui.dart';
 import '../../services/gateway_client.dart';
@@ -20,7 +21,7 @@ class BillsPage extends StatelessWidget {
       (Icons.account_balance, 'Government Services', Colors.orange),
     ];
     return Scaffold(
-      appBar: AppBar(title: const Text('Pay Bills')),
+      appBar: BankingHeader(title: const Text('Pay Bills')),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [

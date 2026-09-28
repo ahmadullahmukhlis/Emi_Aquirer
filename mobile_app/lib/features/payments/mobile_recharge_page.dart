@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 
 import '../../core/app_theme.dart';
 import '../../core/ui.dart';
@@ -116,7 +117,7 @@ class _MobileRechargePageState extends State<MobileRechargePage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Mobile Recharge')),
+    appBar: BankingHeader(title: const Text('Mobile Recharge')),
     body: Column(
       children: [
         Padding(

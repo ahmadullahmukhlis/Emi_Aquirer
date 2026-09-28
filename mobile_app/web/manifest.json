@@ -1,6 +1,6 @@
 {
-    "name": "gateway_mobile",
-    "short_name": "gateway_mobile",
+    "name": "MSHpay",
+    "short_name": "MSHpay",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

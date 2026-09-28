@@ -5,6 +5,8 @@ version: 1.0.0+1
 environment:
   sdk: ^3.8.0
 dependencies:
+  afpay_ui:
+    path: ../packages/afpay_ui
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8

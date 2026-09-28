@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:afpay_ui/afpay_ui.dart';
+import '../../core/pos_navigation.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 import '../../core/app_theme.dart';
@@ -91,71 +93,81 @@ class _PosTerminalPageState extends State<PosTerminalPage>
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    floatingActionButton: FloatingActionButton.extended(
-      onPressed: () => Navigator.push(
+    appBar: BankingHeader(
+      title: const Text('MSHpay'),
+      automaticallyImplyLeading: false,
+      actions: [
+        IconButton(
+          tooltip: 'Check terminal connection',
+          onPressed: () async {
+            try {
+              await widget.client.heartbeat(
+                _terminal.text,
+                'LOCAL-DEMO-SERIAL',
+              );
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Terminal connection confirmed.'),
+                  ),
+                );
+              }
+            } catch (_) {
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Unable to connect to the terminal.'),
+                  ),
+                );
+              }
+            }
+          },
+          icon: const Icon(Icons.wifi_tethering_rounded),
+        ),
+        const SizedBox(width: 10),
+      ],
+    ),
+    bottomNavigationBar: PosNavigation(
+      selectedIndex: 0,
+      onSelected: (_) => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => PosOperationsPage(client: widget.client),
         ),
       ),
-      icon: const Icon(Icons.apps),
-      label: const Text('Operations'),
     ),
     body: SafeArea(
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 680),
           child: ListView(
-            padding: const EdgeInsets.all(22),
+            padding: const EdgeInsets.all(18),
             children: [
-              Row(
-                children: [
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: PosColors.ink,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: const Icon(
-                      Icons.point_of_sale_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'AfPay POS',
-                          style: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                        Text(
-                          'Merchant acceptance terminal',
-                          style: TextStyle(color: Colors.blueGrey),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => widget.client.heartbeat(
-                      _terminal.text,
-                      'LOCAL-DEMO-SERIAL',
-                    ),
-                    icon: const Icon(Icons.wifi_tethering_rounded),
-                  ),
-                ],
+              const Text(
+                'Merchant acceptance terminal',
+                style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800),
               ),
-              const SizedBox(height: 26),
+              const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.all(22),
+                padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
-                  color: PosColors.ink,
-                  borderRadius: BorderRadius.circular(24),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xff075460),
+                      Color(0xff087b80),
+                      Color(0xff0a9b8f),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x30003947),
+                      blurRadius: 22,
+                      offset: Offset(0, 10),
+                    ),
+                  ],
                 ),
                 child: Column(
                   children: [
@@ -169,7 +181,7 @@ class _PosTerminalPageState extends State<PosTerminalPage>
                     ),
                     TextField(
                       controller: _amount,
-                      autofocus: true,
+                      autofocus: false,
                       textAlign: TextAlign.center,
                       keyboardType: TextInputType.number,
                       style: const TextStyle(
@@ -179,6 +191,9 @@ class _PosTerminalPageState extends State<PosTerminalPage>
                       ),
                       decoration: const InputDecoration(
                         hintText: '0',
+                        filled: false,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
                         hintStyle: TextStyle(color: Color(0xff9bd5d0)),
                         border: InputBorder.none,
                         suffixText: 'AFN',
@@ -192,9 +207,11 @@ class _PosTerminalPageState extends State<PosTerminalPage>
                     const Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Online • encrypted channel',
-                          style: TextStyle(color: Color(0xffc8f4f0)),
+                        Flexible(
+                          child: Text(
+                            'Online • encrypted channel',
+                            style: TextStyle(color: Color(0xffc8f4f0)),
+                          ),
                         ),
                         Icon(
                           Icons.verified_user_outlined,

@@ -69,7 +69,7 @@ class _SplashPageState extends State<SplashPage>
                   const BrandMark(size: 58, withContainer: true),
                   const SizedBox(height: 20),
                   const Text(
-                    'AfPay',
+                    'MSHpay',
                     style: TextStyle(
                       fontSize: 29,
                       fontWeight: FontWeight.w900,

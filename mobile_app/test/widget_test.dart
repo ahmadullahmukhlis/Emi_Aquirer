@@ -7,7 +7,7 @@ void main() {
   testWidgets('sandbox login opens the functional mobile home', (tester) async {
     await tester.pumpWidget(const AcquirerMobile());
 
-    expect(find.text('AfPay'), findsOneWidget);
+    expect(find.text('MSHpay'), findsOneWidget);
     await tester.pump(const Duration(milliseconds: 2400));
     await tester.pumpAndSettle();
     await tester.enterText(find.byKey(const Key('login-username')), 'test');
@@ -17,6 +17,11 @@ void main() {
 
     expect(find.text('Current Balance'), findsOneWidget);
     expect(find.text('Send'), findsOneWidget);
+    await tester.scrollUntilVisible(
+      find.text('Recent Transactions'),
+      180,
+      scrollable: find.byType(Scrollable).first,
+    );
     expect(find.text('Recent Transactions'), findsOneWidget);
 
     await tester.tap(find.text('Transactions').last);

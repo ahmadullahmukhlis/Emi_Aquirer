@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'AfPay',
+                      'MSHpay',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 28,
@@ -239,7 +239,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: AppColors.soft,
         child: Icon(Icons.person_add_alt_1, color: AppColors.primary),
       ),
-      title: const Text('Create an AfPay account'),
+      title: const Text('Create an MSHpay account'),
       content: const Text(
         'Account registration requires identity verification. Start with your mobile number and continue securely.',
       ),

@@ -12,7 +12,7 @@ class PosApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     debugShowCheckedModeBanner: false,
-    title: 'AfPay POS',
+    title: 'MSHpay',
     theme: PosTheme.light,
     home: PosLoginPage(client: client ?? GatewayClient()),
   );

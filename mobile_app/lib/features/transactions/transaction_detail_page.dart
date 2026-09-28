@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 
 import '../../core/app_theme.dart';
 import '../../core/ui.dart';
@@ -23,7 +24,7 @@ class TransactionDetailPage extends StatelessWidget {
         transaction['transactionId']?.toString() ??
         'TXN-${DateTime.now().millisecondsSinceEpoch.toString().substring(5)}';
     return Scaffold(
-      appBar: AppBar(
+      appBar: BankingHeader(
         title: const Text('Transaction Details'),
         actions: [
           IconButton(

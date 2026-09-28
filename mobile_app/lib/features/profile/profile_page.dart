@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/banking_header.dart';
 
 import '../../core/app_theme.dart';
 import '../../core/ui.dart';
@@ -36,23 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
       return ListView(
         padding: const EdgeInsets.fromLTRB(18, 18, 18, 28),
         children: [
-          Row(
-            children: [
-              const Expanded(
-                child: Text(
-                  'Profile',
-                  style: TextStyle(fontSize: 23, fontWeight: FontWeight.w800),
-                ),
-              ),
-              IconButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsPage()),
-                ),
-                icon: const Icon(Icons.settings_outlined),
-              ),
-            ],
-          ),
           const SizedBox(height: 8),
           Center(
             child: Stack(
@@ -60,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 CircleAvatar(
                   radius: 42,
-                  backgroundColor: Color(0xff55b0f7),
+                  backgroundColor: AppColors.primary,
                   child: snapshot.connectionState == ConnectionState.waiting
                       ? const SizedBox(
                           width: 22,
@@ -183,7 +167,7 @@ class SettingsPage extends StatelessWidget {
       (Icons.info_outline, 'About', ''),
     ];
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: BankingHeader(title: const Text('Settings')),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
