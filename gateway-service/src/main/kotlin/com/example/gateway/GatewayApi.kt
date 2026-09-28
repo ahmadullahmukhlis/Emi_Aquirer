@@ -42,7 +42,7 @@ class LocalIso8583Switch(
     @param:Value("\${gateway.switch.read-timeout-ms:30000}") private val readTimeoutMs: Int
 ) {
     private val codec = Iso8583Codec()
-    fun execute(channel: PaymentChannel, operation: PaymentOperation, request: PaymentRequest, stan: String): Pair<PaymentStatus, Map<String, String>> {
+    fun execute(channel: PaymentChannel, operation: PaymentOperation, request: PaymentRequest, stan: String, transientDestinationPan: String? = null): Pair<PaymentStatus, Map<String, String>> {
         // APS H2H v1.6 acquirer defaults. Production transport/reversal details remain in a certified profile.
         val mti = when (operation) { PaymentOperation.REVERSAL -> "0400"; PaymentOperation.CARD_TITLE_FETCH -> "1600"; else -> "1100" }
         val processingCode = mapOf(
@@ -60,6 +60,7 @@ class LocalIso8583Switch(
         )[operation] ?: "CONFIGURE"
         val approved = request.amountMinor == null || request.amountMinor <= 10_000_000_00L
         val fields = linkedMapOf("mti" to mti, "field3_processingCode" to processingCode, "field4_amount" to (request.amountMinor ?: 0).toString().padStart(12, '0'), "field11_stan" to stan, "field41_terminalId" to (request.terminalId ?: "MOBILE"), "field42_merchantId" to request.merchantId, "field48.002_transactionType" to transactionTag, "field49_currency" to request.currency, "field60_channel" to channel.name, "field39_responseCode" to if (approved) "00" else "51")
+        if (transientDestinationPan != null) fields["field2_pan"] = transientDestinationPan
         return if (mode.equals("tcp", ignoreCase = true)) executeTcp(mti, fields) else (if (approved) PaymentStatus.APPROVED else PaymentStatus.DECLINED) to fields
     }
     private fun executeTcp(mti: String, fields: Map<String, String>): Pair<PaymentStatus, Map<String, String>> {
@@ -109,7 +110,8 @@ class GatewayController(
     private val payments: PersistentPaymentService,
     private val developerAuth: DeveloperAuthService,
     private val apps: DeveloperAppRepository,
-    private val merchants: MerchantRepository
+    private val merchants: MerchantRepository,
+    private val transactionPolicy: TransactionPolicy
 ) {
     private fun authorizePurchase(authorization: String?, merchantId: String) {
         val token = authorization?.removePrefix("Bearer ") ?: throw SecurityException("API key is required")
@@ -121,6 +123,13 @@ class GatewayController(
     /** Gateway is an execution boundary. Developer accounts, keys and dashboards belong to the Portal. */
     @PostMapping("/mobile/transactions/purchase") @ResponseStatus(HttpStatus.CREATED)
     fun mobilePurchase(@RequestHeader("Authorization", required = false) authorization: String?, @Valid @RequestBody request: PaymentRequest): PaymentResponse { authorizePurchase(authorization, request.merchantId); return payments.submit(PaymentChannel.MOBILE, PaymentOperation.PURCHASE, request) }
+    @PostMapping("/mobile/transactions/{operation}") @ResponseStatus(HttpStatus.CREATED)
+    fun mobileTransaction(@RequestHeader("Authorization", required = false) authorization: String?, @PathVariable operation: String, @Valid @RequestBody request: PaymentRequest): PaymentResponse {
+        authorizePurchase(authorization, request.merchantId)
+        val type = try { PaymentOperation.valueOf(operation.uppercase()) } catch (_: IllegalArgumentException) { throw IllegalArgumentException("Unsupported mobile transaction operation") }
+        transactionPolicy.validate(PaymentChannel.MOBILE, type, request)
+        return payments.submit(PaymentChannel.MOBILE, type, request)
+    }
     @PostMapping("/transactions/purchase") @ResponseStatus(HttpStatus.CREATED)
     fun purchase(@RequestHeader("Authorization", required = false) authorization: String?, @Valid @RequestBody request: PaymentRequest): PaymentResponse { authorizePurchase(authorization, request.merchantId); return payments.submit(if (request.terminalId.isNullOrBlank()) PaymentChannel.MOBILE else PaymentChannel.POS, PaymentOperation.PURCHASE, request) }
     @GetMapping("/transactions/{id}") fun transaction(@PathVariable id: String) = payments.get(id)

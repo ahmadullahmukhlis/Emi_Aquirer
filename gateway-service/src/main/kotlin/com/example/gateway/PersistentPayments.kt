@@ -40,7 +40,7 @@ class PersistentPaymentService(
     )
 
     @Transactional
-    fun submit(channel: PaymentChannel, operation: PaymentOperation, request: PaymentRequest): PaymentResponse {
+    fun submit(channel: PaymentChannel, operation: PaymentOperation, request: PaymentRequest, transientDestinationPan: String? = null): PaymentResponse {
         policy.validate(channel, operation, request)
         risk.validateEstate(channel, request)
         risk.validateLimit(operation, request)
@@ -55,11 +55,12 @@ class PersistentPaymentService(
             ApsSimulatorScenario.DECLINED -> PaymentStatus.DECLINED to linkedMapOf("mti" to "1110", "field11_stan" to stan, "field39_responseCode" to "51")
             ApsSimulatorScenario.DUPLICATE -> PaymentStatus.DECLINED to linkedMapOf("mti" to "1110", "field11_stan" to stan, "field39_responseCode" to "811")
             ApsSimulatorScenario.MALFORMED_RESPONSE -> PaymentStatus.PENDING to linkedMapOf("mti" to "1100", "field11_stan" to stan, "field39_responseCode" to "96", "recoveryReason" to "Malformed APS simulator response")
-            else -> try { switch.execute(channel, operation, request, stan) } catch (ex: Exception) { PaymentStatus.PENDING to linkedMapOf("mti" to "1100", "field11_stan" to stan, "field41_terminalId" to (request.terminalId ?: "MOBILE"), "field42_merchantId" to request.merchantId, "field39_responseCode" to "96", "recoveryReason" to (ex.message ?: "APS connection outcome unknown")) }
+            else -> try { switch.execute(channel, operation, request, stan, transientDestinationPan) } catch (ex: Exception) { PaymentStatus.PENDING to linkedMapOf("mti" to "1100", "field11_stan" to stan, "field41_terminalId" to (request.terminalId ?: "MOBILE"), "field42_merchantId" to request.merchantId, "field39_responseCode" to "96", "recoveryReason" to (ex.message ?: "APS connection outcome unknown")) }
         }
         val (switchStatus, iso) = outcome
         val status = if (operation == PaymentOperation.REVERSAL && switchStatus == PaymentStatus.APPROVED) PaymentStatus.REVERSED else switchStatus
-        val entity = PaymentEntity(id, channel, operation, request.requestId, request.idempotencyKey, request.merchantId, request.terminalId, request.amountMinor, request.currency.uppercase(), status, iso.getValue("field39_responseCode"), stan, if (switchStatus == PaymentStatus.APPROVED) (iso["field37_rrn"] ?: UUID.randomUUID().toString().replace("-", "").take(12)) else null, request.originalTransactionId, iso.encode())
+        val safeIso = iso.filterKeys { it != "field2_pan" && it != "field2" }
+        val entity = PaymentEntity(id, channel, operation, request.requestId, request.idempotencyKey, request.merchantId, request.terminalId, request.amountMinor, request.currency.uppercase(), status, safeIso.getValue("field39_responseCode"), stan, if (switchStatus == PaymentStatus.APPROVED) (safeIso["field37_rrn"] ?: UUID.randomUUID().toString().replace("-", "").take(12)) else null, request.originalTransactionId, safeIso.encode())
         payments.save(entity)
         events.save(PaymentTransactionEventEntity(transactionId = entity.id, status = entity.status, eventType = "APS_RESPONSE", detail = "APS response code ${entity.responseCode}", correlationId = request.requestId))
         if (entity.status == PaymentStatus.PENDING) {
